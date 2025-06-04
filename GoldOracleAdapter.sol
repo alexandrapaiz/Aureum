@@ -21,13 +21,17 @@ contract GoldOracleAdapter is Ownable {
     event OracleUpdated(address indexed newFeed);
     event ManualPriceSet(uint256 price, uint256 timestamp);
 
-    constructor(address _chainlinkFeed) {
+    constructor(address _chainlinkFeed, address _initialOwner) Ownable(_initialOwner) {
         chainlinkFeed = IChainlinkFeed(_chainlinkFeed);
     }
 
     function getLatestPrice() external view returns (uint256 price, uint256 timestamp) {
         try chainlinkFeed.latestRoundData() returns (
-            uint80, int256 answer, , uint256 updatedAt, uint80
+            uint80 /* roundId */,
+            int256 answer,
+            uint256 /* startedAt */,
+            uint256 updatedAt,
+            uint80 /* answeredInRound */
         ) {
             require(answer > 0, "Invalid price");
             return (uint256(answer), updatedAt);

@@ -23,6 +23,7 @@ contract AureumToken is ERC20, Ownable {
 
     constructor(address oracleAddress, address feeModuleAddress)
         ERC20("Aureum", "AUR")
+        Ownable(msg.sender)
     {
         oracle = IGoldOracle(oracleAddress);
         feeModule = IFeeModule(feeModuleAddress);
